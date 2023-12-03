@@ -1,4 +1,4 @@
-# game-server-vyts-project
+# Game Service - Vyts Project
 Project is in development progress.
 
 ## Main setup requirements
