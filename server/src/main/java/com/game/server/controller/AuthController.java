@@ -40,11 +40,11 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@RequestBody UserRequest userRequest) {
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword());
 
-        Authentication auth = authenticationManager.authenticate(token);
+        Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        String jwtToken = jwtTokenProvider.generateJwtToken(token);
+        String jwtToken = jwtTokenProvider.generateJwtToken(auth);
 
         User user = userService.findByUsername(userRequest.getUsername());
 
@@ -52,6 +52,7 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Bearer "+ jwtToken);
         authResponse.setUsername(user.getUsername());
+        authResponse.setRole(user.getRole().getRoleName());
 
         return authResponse;
     }
