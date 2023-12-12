@@ -51,7 +51,7 @@ export default function Registration() {
                                 username: inputAll.username, password: inputAll.password}; // create user object to send to backend
         
         
-        axios.post(API_BASE_URL +"/"+ roleType, userRegister) // request to save laborant
+        axios.post(API_BASE_URL +"/"+ roleType, userRegister) // request to save user
             .then(res => {
                 if(res.status === 201){
                    setMessage(res.data.message); // show message when registration is successful
