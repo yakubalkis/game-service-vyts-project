@@ -1,54 +1,57 @@
 package com.game.server.service;
 
 import com.game.server.entity.User;
+import com.game.server.exception.UserNotFoundException;
 import com.game.server.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
 
-    private UserRepository repository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    @Override
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public List<User> findAll() {
-        return repository.findAll();
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
-    public User findById(Long id) {
-        Optional<User> result = repository.findById(id);
-        User user = null;
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
-        if(result.isPresent()) {
-            user = result.get();
+    @Override
+    public boolean hasUserWithUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean hasUserWithEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User validateAndGetUserByUsername(String username) {
+        if(getUserByUsername(username) == null) {
+            throw new UserNotFoundException(String.format("User with username %s not found", username));
         } else {
-            throw new RuntimeException("Did not found report with id: "+ id);
+            return getUserByUsername(username);
         }
-
-        return user;
     }
 
     @Override
-    public User save(User user) {
-        return repository.save(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public User findByUsername(String id) {
-        return repository.findUserByUsername(id);
-    }
 }

@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-const API_LOGIN_URL = "http://localhost:8080/api/v1/auth/login";
+import googleLogo from '../../img/google-logo.png';
+import githubLogo from '../../img/github-logo.png';
+import { getSocialLoginUrl } from "../../utils/Helpers";
+const API_LOGIN_URL = "http://localhost:8080/auth/login";
 
 export default function Login(){
 
@@ -40,7 +43,7 @@ export default function Login(){
         axios.post(API_LOGIN_URL, userRequest) // request to login
             .then(res => {
                 localStorage.setItem("tokenKey", res.data.message); // set items to local storage to use in other components
-                localStorage.setItem("usernameOfCurrentUser", inputAll.username);
+                localStorage.setItem("user", JSON.stringify(inputAll.username));
                 if(res.data.role === "ROLE_USER") {
                     navigate(`/user/${inputAll.username}`); // route to user page !!!!!!!!!
                 } else if(res.data.role === "ROLE_ADMIN") {
@@ -85,6 +88,17 @@ export default function Login(){
                             <label  style={{marginLeft: "0.5rem", color: "red"}}>{labelWarning}</label>
 
                         </form>
+                        <div className="social-login">
+                            <a className="btn btn-block social-btn google" href={getSocialLoginUrl('google')}>
+                                <img src={googleLogo} alt="Google" />
+                                <label>Log in with Google</label>
+                            </a>
+                            
+                            <a className="btn btn-block social-btn github" href={getSocialLoginUrl('github')}>
+                                <img src={githubLogo} alt="Github" /> 
+                                <label>Log in with Github</label>
+                            </a>
+                        </div>
                     </div>
 
                 </div>

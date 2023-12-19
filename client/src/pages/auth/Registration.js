@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from "axios";
 import { Link } from "react-router-dom";
 import MessageToast from "../../components/MessageToast";
-const API_BASE_URL = "http://localhost:8080/api/v1/auth/register";
+const API_BASE_URL = "http://localhost:8080/auth/register";
 
 export default function Registration() {
 
@@ -13,10 +13,9 @@ export default function Registration() {
     const [roleType, setRoleType] = useState(""); // role type (user/admin)
  
     const [inputAll, setInputAll] = useState({ // for input values in form
-        firstName: "",
-        lastName: "",
         username: "",
-        password: ""
+        email: "",
+        password: "",
     }); 
 
     function handleOption(event){ // is used for radio buttons 
@@ -34,10 +33,10 @@ export default function Registration() {
         });
     }
 
-    function saveLaborant(e){ // to register laborant
+    function saveUser(e){ // to register user
         e.preventDefault();
         
-        if(inputAll.firstName === "" || inputAll.lastName === "" || inputAll.username === "" || inputAll.password === ""){ // basic checks
+        if(inputAll.email === "" || inputAll.username === "" || inputAll.password === ""){ // basic checks
             setLabelWarning(() => "Please fill in the all text boxes!");
             return;
         }
@@ -47,8 +46,7 @@ export default function Registration() {
         }
         else{setLabelWarning(() => "");}
 
-        let userRegister = {firstName: inputAll.firstName, lastName: inputAll.lastName, 
-                                username: inputAll.username, password: inputAll.password}; // create user object to send to backend
+        let userRegister = {username: inputAll.username, email:inputAll.email, password: inputAll.password}; // create user object to send to backend
         
         
         axios.post(API_BASE_URL +"/"+ roleType, userRegister) // request to save user
@@ -58,9 +56,8 @@ export default function Registration() {
                    setShow(true);
                    setRoleType("");
                    setInputAll({ // clean up form inputs
-                   firstName: "",
-                   lastName: "",
                    username: "",
+                   email:"",
                    password: ""});
                 }
             }).catch(res => {
@@ -79,20 +76,14 @@ export default function Registration() {
 
                     <div className="card-body">
                         <form>
-
-                            <div className="form-group">
-                                <label>First Name: </label>
-                                <input className="form-control" placeholder="First Name" type="text" name="firstName" value={inputAll.firstName}  onChange={handleChange}/>
-                            </div><br></br>
-
-                            <div className="form-group">
-                                <label>Last Name: </label>
-                                <input className="form-control" placeholder="Last Name" type="text" name="lastName" value={inputAll.lastName}  onChange={handleChange}/>
-                            </div><br></br>
-
                             <div className="form-group">
                                 <label>Username</label>
                                 <input className="form-control" placeholder="Username" type="text" name="username" value={inputAll.username}  onChange={handleChange} />
+                            </div><br></br>
+
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input className="form-control" placeholder="Email" type="text" name="email" value={inputAll.email}  onChange={handleChange} />
                             </div><br></br>
 
                             <div className="form-group">
@@ -109,7 +100,7 @@ export default function Registration() {
                             </div><br></br>
                             
                             <div className="form-group">
-                                <button type="submit" className="btn btn-success" onClick={saveLaborant}>Register</button>
+                                <button type="submit" className="btn btn-success" onClick={saveUser}>Register</button>
                                 <span style={{marginLeft: "1rem"}}>Already registered?
                                    <Link to="/login">
                                         <span style={{marginLeft: "3px"}}>Login</span>

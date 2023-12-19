@@ -5,7 +5,7 @@ import Logout from "./Logout"
 export default function Header(){
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const username = localStorage.getItem("usernameOfCurrentUser"); // get host ID no from local storage
+    const username = localStorage.getItem("user"); // get host ID no from local storage
     
 
     useEffect(() => {

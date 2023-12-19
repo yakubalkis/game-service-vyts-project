@@ -1,19 +1,19 @@
-package com.game.server.response;
+package com.game.server.rest.dto;
 
-public class AuthResponse {
+public class SignUpResponse {
     String message;
     String username;
     String role;
 
-    public AuthResponse() {
+    public SignUpResponse() {
     }
 
-    public AuthResponse(String message, String username) {
+    public SignUpResponse(String message, String username) {
         this.message = message;
         this.username = username;
     }
 
-    public AuthResponse(String message, String username, String role) {
+    public SignUpResponse(String message, String username, String role) {
         this.message = message;
         this.username = username;
         this.role = role;

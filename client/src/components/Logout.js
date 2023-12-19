@@ -1,15 +1,16 @@
 import { useNavigate } from 'react-router';
 
 
-export default function Logout(){
 
+export default function Logout(){
     const navigate = useNavigate();
-    const username = localStorage.getItem("usernameOfCurrentUser"); // get username no from local storage
+    const username = localStorage.getItem("user"); // get username no from local storage
+    
 
     function handleLogout(){
-        localStorage.removeItem("usernameOfCurrentUser"); // remove items from local storage
+        localStorage.removeItem("user"); // remove items from local storage
+        localStorage.removeItem("isReloaded");
         localStorage.removeItem("tokenKey");
-
         navigate("/login"); // redirect to login page
         window.location.reload();
     }

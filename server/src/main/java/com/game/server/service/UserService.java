@@ -3,16 +3,21 @@ package com.game.server.service;
 import com.game.server.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<User> getUsers();
 
-    User findById(Long id);
+    User getUserByUsername(String username);
 
-    User save(User user);
+    Optional<User> getUserByEmail(String email);
 
-    void deleteById(Long id);
+    boolean hasUserWithUsername(String username);
 
-    User findByUsername(String id);
+    boolean hasUserWithEmail(String email);
+
+    User validateAndGetUserByUsername(String username);
+
+    User saveUser(User user);
 }

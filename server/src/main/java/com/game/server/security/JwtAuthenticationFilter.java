@@ -1,54 +1,57 @@
 package com.game.server.security;
 
-import com.game.server.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
-            String jwtToken = extractJwtFromRequest(request);
-            if(StringUtils.hasText(jwtToken) && jwtTokenProvider.validateToken(jwtToken)) {
-                Long id = jwtTokenProvider.getUserIdFromJwt(jwtToken);
-                UserDetails user = userDetailsService.loadUserById(id);
-                if(user != null) {
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-            }
+            getJwtFromRequest(request)
+                    .flatMap(tokenProvider::validateTokenAndGetJws)
+                    .ifPresent(jws -> {
+                        String username = jws.getBody().getSubject();
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    });
         } catch (Exception e) {
-            return;
+            log.error("Cannot set user authentication", e);
         }
-        filterChain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
 
-    private String extractJwtFromRequest(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
-        if(StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
-            return bearer.substring("Bearer".length() + 1);
+    private Optional<String> getJwtFromRequest(HttpServletRequest request) {
+        String tokenHeader = request.getHeader(TOKEN_HEADER);
+        if (StringUtils.hasText(tokenHeader) && tokenHeader.startsWith(TOKEN_PREFIX)) {
+            return Optional.of(tokenHeader.replace(TOKEN_PREFIX, ""));
         }
-        return null;
+        return Optional.empty();
     }
+
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
 }
