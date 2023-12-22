@@ -2,6 +2,7 @@ package com.game.server.rest;
 
 import com.game.server.entity.User;
 import com.game.server.exception.DuplicatedUserInfoException;
+import com.game.server.request.EmailRequest;
 import com.game.server.rest.dto.AuthResponse;
 import com.game.server.rest.dto.LoginRequest;
 import com.game.server.rest.dto.SignUpRequest;
@@ -10,6 +11,7 @@ import com.game.server.security.JwtTokenProvider;
 import com.game.server.security.WebSecurityConfig;
 import com.game.server.security.oauth2.AuthProvider;
 import com.game.server.service.UserService;
+import com.game.server.service.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,9 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
-
+    private final EmailService emailService;
     private final AuthenticationConfiguration authConfiguration;
+
 
     @Autowired
     public AuthenticationManager authenticationManager() throws Exception {
@@ -54,6 +57,7 @@ public class AuthController {
         return new AuthResponse(token);
     }
 
+
     @PostMapping("/login")
     public SignUpResponse loginLocal(@RequestBody LoginRequest userRequest) throws Exception {
 
@@ -62,15 +66,15 @@ public class AuthController {
         Authentication auth = authenticationManager().authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = tokenProvider.generate(auth);
-
         User user = userService.getUserByUsername(userRequest.getUsername());
-
+        EmailRequest emailRequest = new EmailRequest("s68472968@gmail.com", user.getEmail(), "Giriş Yapma İşlemi Başarılı",
+                "Başarıyla giriş yaptınız!");
         // set jwt and username to response
         SignUpResponse authResponse = new SignUpResponse();
-        authResponse.setMessage("Bearer "+ jwtToken);
+        authResponse.setMessage("Bearer " + jwtToken);
         authResponse.setUsername(user.getUsername());
         authResponse.setRole(user.getRole());
-
+        sendMail(emailRequest);
         return authResponse;
     }
 
@@ -92,19 +96,22 @@ public class AuthController {
 
     @PostMapping("/register/{roleName}")
     public ResponseEntity<SignUpResponse> registerLocal(@PathVariable String roleName, @RequestBody User user) {
+
         SignUpResponse authResponse = new SignUpResponse();
         String role = null;
+        EmailRequest emailRequest = new EmailRequest("s68472968@gmail.com", user.getEmail(), "Kayıt Olma İşlemi Başarılı",
+                "Başarıyla kayıt oldunuz!");
 
         // check if username is already existed
-        if(userService.getUserByUsername(user.getUsername()) != null) {
+        if (userService.getUserByUsername(user.getUsername()) != null) {
             authResponse.setMessage("Username already in use");
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
 
         // set role to laborant
-        if(roleName.equals("admin")) {
+        if (roleName.equals("admin")) {
             role = "ROLE_ADMIN";
-        } else if(roleName.equals("user")) {
+        } else if (roleName.equals("user")) {
             role = "ROLE_USER";
         }
         user.setRole(role);
@@ -115,6 +122,7 @@ public class AuthController {
         userService.saveUser(user);
         authResponse.setMessage("Successfully registered. You can login.");
 
+        sendMail(emailRequest);
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
@@ -132,5 +140,9 @@ public class AuthController {
         user.setRole(WebSecurityConfig.USER);
         user.setProvider(AuthProvider.LOCAL);
         return user;
+    }
+
+    public String sendMail(EmailRequest emailrequest) {
+        return emailService.sendMail(emailrequest.getTo(), emailrequest.getCc(), emailrequest.getSubject(), emailrequest.getBody());
     }
 }

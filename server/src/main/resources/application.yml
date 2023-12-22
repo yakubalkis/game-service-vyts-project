@@ -1,50 +1,64 @@
 spring:
-  application:
-    name: game-api
-  datasource:
-    url: jdbc:postgresql://localhost:5432/game_service_db?useSSL=false
-    username: postgres
-    password: yxcyxc
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 1027889936966-54qu04s72vb0lo1e0bjd4v3ps133jia6.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - email
-              - profile
-          github:
-            client-id: ef31a05a34f4ce589a08
-            client-secret: 4aa80d25b36d9ada34b223017d16fce46e38422c
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-    properties:
+   application:
+      name: game-api
+   datasource:
+      url: jdbc:postgresql://localhost:5432/game_service_db?useSSL=false
+      username: postgres
+      password: yxcyxc
+   security:
+      oauth2:
+         client:
+            registration:
+               google:
+                  client-id: 1027889936966-54qu04s72vb0lo1e0bjd4v3ps133jia6.apps.googleusercontent.com
+                  client-secret: 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
+                  scope:
+                     - email
+                     - profile
+               github:
+                  client-id: ef31a05a34f4ce589a08
+                  client-secret: 4aa80d25b36d9ada34b223017d16fce46e38422c
+   mail:
+      host: smtp.gmail.com
+      username: s68472968@gmail.com
+      password: erdawnoqkyzjmgth
+      port: 587
+      properties:
+         mail:
+            smtp:
+               starttls:
+                  enable: true
+               auth: true
+   jpa:
+      show-sql: true
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-  main:
-    allow-bean-definition-overriding: true
+         ddl-auto: update
+         naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      properties:
+         hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+      generate-ddl: true
+   main:
+      allow-bean-definition-overriding: true
 
-
-  mvc:
-    pathmatch:
-      matching-strategy=ANT_PATH_MATCHER:
+   mvc:
+      pathmatch:
+         matching-strategy=ANT_PATH_MATCHER:
 server:
-  port: 8080
+   port: 8080
 
 app:
-  jwt:
-    # Signing key for HS512 algorithm
-    # In http://www.allkeysgenerator.com/ you can generate all kinds of keys
-    secret: v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp
-    expiration:
-      minutes: 10
-  oauth2:
-    redirectUri: http://localhost:3000/oauth2/redirect
-  cors:
-    allowed-origins: http://localhost:3000
+   jwt:
+      # Signing key for HS512 algorithm
+      # In http://www.allkeysgenerator.com/ you can generate all kinds of keys
+      secret: v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp
+      expiration:
+         minutes: 10
+   oauth2:
+      redirectUri: http://localhost:3000/oauth2/redirect
+   cors:
+      allowed-origins: http://localhost:3000
+
+
+
+
