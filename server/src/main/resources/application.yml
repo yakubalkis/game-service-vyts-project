@@ -59,6 +59,8 @@ app:
    cors:
       allowed-origins: http://localhost:3000
 
-
-
+twilio:
+   account_sid: ACf0e19179166719c5fa49f07d64b0ea93
+   auth_token: e43365c48e3167c6ff8eee91aeda7dab
+   trial_number: +14804051651
 

@@ -15,7 +15,8 @@ export default function Registration() {
     const [inputAll, setInputAll] = useState({ // for input values in form
         username: "",
         email: "",
-        password: "",
+        phoneNumber: "",
+        password: ""
     }); 
 
     function handleOption(event){ // is used for radio buttons 
@@ -36,7 +37,7 @@ export default function Registration() {
     function saveUser(e){ // to register user
         e.preventDefault();
         
-        if(inputAll.email === "" || inputAll.username === "" || inputAll.password === ""){ // basic checks
+        if(inputAll.email === "" || inputAll.username === "" || inputAll.password === "" || inputAll.phoneNumber === ""){ // basic checks
             setLabelWarning(() => "Please fill in the all text boxes!");
             return;
         }
@@ -46,7 +47,7 @@ export default function Registration() {
         }
         else{setLabelWarning(() => "");}
 
-        let userRegister = {username: inputAll.username, email:inputAll.email, password: inputAll.password}; // create user object to send to backend
+        let userRegister = {username: inputAll.username, email:inputAll.email, phoneNumber: inputAll.phoneNumber, password: inputAll.password}; // create user object to send to backend
         
         
         axios.post(API_BASE_URL +"/"+ roleType, userRegister) // request to save user
@@ -58,7 +59,9 @@ export default function Registration() {
                    setInputAll({ // clean up form inputs
                    username: "",
                    email:"",
-                   password: ""});
+                   phoneNumber: "",
+                   password: ""                   
+                   });
                 }
             }).catch(res => {
                    setMessage(res.response.data.message); // Username must be UNIQUE, otherwise will give error and show error message
@@ -84,6 +87,11 @@ export default function Registration() {
                             <div className="form-group">
                                 <label>Email</label>
                                 <input className="form-control" placeholder="Email" type="text" name="email" value={inputAll.email}  onChange={handleChange} />
+                            </div><br></br>
+
+                            <div className="form-group">
+                                <label>Phone Number: </label>
+                                <input className="form-control" placeholder="Phone Number" type="text" name="phoneNumber" value={inputAll.phoneNumber}  onChange={handleChange}/>
                             </div><br></br>
 
                             <div className="form-group">

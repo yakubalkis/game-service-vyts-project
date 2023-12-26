@@ -29,6 +29,8 @@ public class User {
 
     private String email;
 
+    private String phoneNumber;
+
     private Boolean emailVerified = false;
 
     private String password;
@@ -43,10 +45,11 @@ public class User {
     private String role;
 
 
-    public User(String username, String password, String email, String role, String imageUrl, AuthProvider provider, String providerId) {
+    public User(String username, String password, String email, String phoneNumber, String role, String imageUrl, AuthProvider provider, String providerId) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.imageUrl = imageUrl;
         this.provider = provider;
