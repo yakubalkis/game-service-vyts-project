@@ -61,6 +61,6 @@ app:
 
 twilio:
    account_sid: ACf0e19179166719c5fa49f07d64b0ea93
-   auth_token: e43365c48e3167c6ff8eee91aeda7dab
+   auth_token: 7d6514947a86c619d2814b294261f0aa
    trial_number: +14804051651
 
