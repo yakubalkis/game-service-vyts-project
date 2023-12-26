@@ -3,6 +3,7 @@ package com.game.server.rest;
 import com.game.server.entity.User;
 import com.game.server.exception.DuplicatedUserInfoException;
 import com.game.server.request.EmailRequest;
+import com.game.server.request.SmsRequest;
 import com.game.server.rest.dto.AuthResponse;
 import com.game.server.rest.dto.LoginRequest;
 import com.game.server.rest.dto.SignUpRequest;
@@ -12,6 +13,7 @@ import com.game.server.security.WebSecurityConfig;
 import com.game.server.security.oauth2.AuthProvider;
 import com.game.server.service.UserService;
 import com.game.server.service.EmailService;
+import com.game.server.service.SmsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final EmailService emailService;
+    private final SmsService smsService;
     private final AuthenticationConfiguration authConfiguration;
 
 
@@ -69,12 +72,16 @@ public class AuthController {
         User user = userService.getUserByUsername(userRequest.getUsername());
         EmailRequest emailRequest = new EmailRequest("s68472968@gmail.com", user.getEmail(), "Giriş Yapma İşlemi Başarılı",
                 "Başarıyla giriş yaptınız!");
+        SmsRequest smsRequest = new SmsRequest (user.getPhoneNumber(), "Başarıyla giriş yaptınız!");
         // set jwt and username to response
         SignUpResponse authResponse = new SignUpResponse();
         authResponse.setMessage("Bearer " + jwtToken);
         authResponse.setUsername(user.getUsername());
         authResponse.setRole(user.getRole());
+
         sendMail(emailRequest);
+        sendSms(smsRequest);
+
         return authResponse;
     }
 
@@ -101,7 +108,7 @@ public class AuthController {
         String role = null;
         EmailRequest emailRequest = new EmailRequest("s68472968@gmail.com", user.getEmail(), "Kayıt Olma İşlemi Başarılı",
                 "Başarıyla kayıt oldunuz!");
-
+        SmsRequest smsRequest = new SmsRequest (user.getPhoneNumber(), "Başarıyla kayıt oldunuz!");
         // check if username is already existed
         if (userService.getUserByUsername(user.getUsername()) != null) {
             authResponse.setMessage("Username already in use");
@@ -123,6 +130,8 @@ public class AuthController {
         authResponse.setMessage("Successfully registered. You can login.");
 
         sendMail(emailRequest);
+        sendSms(smsRequest);
+
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
@@ -144,5 +153,9 @@ public class AuthController {
 
     public String sendMail(EmailRequest emailrequest) {
         return emailService.sendMail(emailrequest.getTo(), emailrequest.getCc(), emailrequest.getSubject(), emailrequest.getBody());
+    }
+
+    public void sendSms(SmsRequest smsRequest) {
+        smsService.sendSms(smsRequest);
     }
 }
