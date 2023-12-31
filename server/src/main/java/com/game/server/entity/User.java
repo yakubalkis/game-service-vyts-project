@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
@@ -52,6 +53,10 @@ public class User {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "rank_id")
     private Rank rank;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
 
 
     public User(String username, String password, String email, String phoneNumber, String role, String symbol, AuthProvider provider, String dateOfJoin) {

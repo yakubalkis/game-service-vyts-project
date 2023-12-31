@@ -1,5 +1,6 @@
 package com.game.server.rest;
 
+import com.game.server.entity.Budget;
 import com.game.server.entity.Level;
 import com.game.server.entity.Rank;
 import com.game.server.entity.User;
@@ -118,7 +119,7 @@ public class AuthController {
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
 
-        // set role to laborant
+        // set role to user
         if (roleName.equals("admin")) {
             role = "ROLE_ADMIN";
         } else if (roleName.equals("user")) {
@@ -132,6 +133,10 @@ public class AuthController {
         Level level = levelService.findByLevelName("1");
         user.setRank(rank);
         user.setLevel(level);
+
+        // set budget as init
+        Budget budget = new Budget(0);
+        user.setBudget(budget);
 
         // encode and set password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
