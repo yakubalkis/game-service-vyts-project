@@ -37,7 +37,7 @@ public class DataInitializer {
                 new Rank("Senior", 7000)
         );
 
-        levelRepository.saveAll(levels);
-        rankRepository.saveAll(ranks);
+        /*levelRepository.saveAll(levels);
+        rankRepository.saveAll(ranks);*/
     }
 }
