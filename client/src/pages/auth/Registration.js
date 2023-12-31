@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios";
 import { Link } from "react-router-dom";
 import MessageToast from "../../components/MessageToast";
+import getDate from "../../utils/getDate";
 const API_BASE_URL = "http://localhost:8080/auth/register";
 
 export default function Registration() {
@@ -47,7 +48,7 @@ export default function Registration() {
         }
         else{setLabelWarning(() => "");}
 
-        let userRegister = {username: inputAll.username, email:inputAll.email, phoneNumber: inputAll.phoneNumber, password: inputAll.password}; // create user object to send to backend
+        let userRegister = {username: inputAll.username, email:inputAll.email, phoneNumber: inputAll.phoneNumber, password: inputAll.password, dateOfJoin: getDate()}; // create user object to send to backend
         
         
         axios.post(API_BASE_URL +"/"+ roleType, userRegister) // request to save user

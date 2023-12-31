@@ -1,5 +1,7 @@
 package com.game.server.rest;
 
+import com.game.server.entity.Level;
+import com.game.server.entity.Rank;
 import com.game.server.entity.User;
 import com.game.server.exception.DuplicatedUserInfoException;
 import com.game.server.request.EmailRequest;
@@ -11,13 +13,14 @@ import com.game.server.rest.dto.SignUpResponse;
 import com.game.server.security.JwtTokenProvider;
 import com.game.server.security.WebSecurityConfig;
 import com.game.server.security.oauth2.AuthProvider;
+import com.game.server.service.LevelService;
+import com.game.server.service.RankService;
 import com.game.server.service.UserService;
 import com.game.server.service.EmailService;
 import com.game.server.service.SmsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @RestController
@@ -46,6 +47,8 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
     private final EmailService emailService;
     private final SmsService smsService;
+    private final LevelService levelService;
+    private final RankService rankService;
     private final AuthenticationConfiguration authConfiguration;
 
 
@@ -123,6 +126,12 @@ public class AuthController {
         }
         user.setRole(role);
         user.setProvider(AuthProvider.LOCAL);
+
+        // set level and rank as init
+        Rank rank = rankService.findByRankName("Newbie");
+        Level level = levelService.findByLevelName("1");
+        user.setRank(rank);
+        user.setLevel(level);
 
         // encode and set password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
