@@ -147,6 +147,8 @@ public class AuthController {
         Level level = levelService.findByLevelName("1");
         user.setRank(rank);
         user.setLevel(level);
+        user.setLevelPointOfUser(level.getMinPoint());
+        user.setRankPointOfUser(rank.getMinPoint());
 
         // set budget as init
         Budget budget = new Budget(0);

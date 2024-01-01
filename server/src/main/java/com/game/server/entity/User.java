@@ -50,6 +50,10 @@ public class User {
 
     private String dateOfJoin;
 
+    private Integer levelPointOfUser;
+
+    private Integer rankPointOfUser;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}) // oyuncu silindiginde, level-rank tablolalari silinmesin
     @JoinColumn(name = "level_id")
     private Level level;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class RiseRequest {
 
+    String username;
     Integer point;
-    Integer currentLevelName;
-    String currentRankName;
+    String processType;
 }

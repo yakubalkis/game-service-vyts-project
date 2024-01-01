@@ -8,6 +8,8 @@ public interface RankService {
 
     List<Rank> findAll();
 
+    Rank findById(Long id);
+
     void save(Rank rank);
 
     Rank findByRankName(String name);

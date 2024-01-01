@@ -1,13 +1,13 @@
 package com.game.server.rest;
 
+import com.game.server.entity.Level;
+import com.game.server.entity.Rank;
 import com.game.server.entity.User;
-import com.game.server.rest.dto.AuthResponse;
 import com.game.server.rest.dto.RiseRequest;
 import com.game.server.service.LevelService;
 import com.game.server.service.RankService;
 import com.game.server.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,20 +22,61 @@ public class LevelAndRankController {
     private final LevelService levelService;
     private final UserService userService;
 
-    @PutMapping("/level/{username}")
-    public AuthResponse changeLevel(@PathVariable String username, @RequestBody RiseRequest request) {
-        User currentUser = userService.getUserByUsername(username);
-        // rank ve level tablolari iliskisiz olmali mi,sadece min puan ve ad bilgisi icin kullanilmali mi?
-        // user'da hangi attribute ile karsilastirma yapip level ve rank degistircez?
+    @PutMapping("/rank")
+    public String changeRank(@RequestBody RiseRequest request) {
+        User currentUser = userService.getUserByUsername(request.getUsername());
+        if(request.getProcessType().equals("increase")) { // TO-DO: bu kisim yapilacak
+
+        }
+        else if(request.getProcessType().equals("decrease")) {
+
+        }
 
         return null;
     }
 
-    @PutMapping("/rank/{username}")
-    public AuthResponse changeRank(@PathVariable String username, @RequestBody RiseRequest request) {
-        User currentUser = userService.getUserByUsername(username);
+    @PutMapping("/level")
+    public String changeLevel(@RequestBody RiseRequest request) {
+        User user = userService.getUserByUsername(request.getUsername());
+        Level currentLevel = levelService.findByLevelName(user.getLevel().getLevelName());
 
-        return null;
+        if(request.getProcessType().equals("increase")) { // level veya point arttir
+            Integer addedPoint = user.getLevelPointOfUser() + request.getPoint();
+
+            if(currentLevel.getId() != 5) { // Buradaki 5, level tablosundaki son levelin id si olacak!
+                Level nextLevel = levelService.findById(currentLevel.getId()+1);
+
+                if(addedPoint >= nextLevel.getMinPoint()) { // level attir
+                    user.setLevel(nextLevel);
+                    user.setLevelPointOfUser(addedPoint);
+                    userService.saveUser(user);
+                    return "Level increased, congratulations!"; // loglansin bu returnden önce, seviye atladi cünkü
+                }
+            }
+            user.setLevelPointOfUser(addedPoint); // seviye atlama yok, puani ekle kaydet
+            userService.saveUser(user);
+        }
+        else if(request.getProcessType().equals("decrease")) { // level veya point azalt
+            Integer substractedPoint = user.getLevelPointOfUser() - request.getPoint();
+
+            if(currentLevel.getId() != 1) { // id 1 den öncesi yok o yüzden check
+                Level previousLevel = levelService.findById(currentLevel.getId()-1);
+                if(substractedPoint < currentLevel.getMinPoint()) {
+                    user.setLevel(previousLevel);
+                    user.setLevelPointOfUser(substractedPoint);
+                    userService.saveUser(user);
+                    return "Level decreased, play hard!"; // loglansin bu returnden önce, seviye düstü cünkü
+                }
+            }
+            if(substractedPoint >= 100) { // seviye düsme yok, puani ekle kaydet
+                user.setLevelPointOfUser(substractedPoint);
+            } else { // puan 100 den asagi düsmemeli o zaten baslangic puani
+                user.setLevelPointOfUser(100);
+            }
+            userService.saveUser(user);
+        }
+
+        return "Changed level point.";
     }
 
 }
