@@ -2,6 +2,7 @@ package com.game.server.rest;
 
 import com.game.server.entity.Budget;
 import com.game.server.entity.Level;
+import com.game.server.entity.Log;
 import com.game.server.entity.Rank;
 import com.game.server.entity.User;
 import com.game.server.exception.DuplicatedUserInfoException;
@@ -36,6 +37,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @RequiredArgsConstructor
@@ -83,8 +87,17 @@ public class AuthController {
         authResponse.setUsername(user.getUsername());
         authResponse.setRole(user.getRole());
 
+        // sms and mail
         sendMail(emailRequest);
         sendSms(smsRequest);
+        // log
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        String message = "User logged in on " + formattedDateTime + ".";
+        Log log = new Log(message , "auth");
+        user.addLog(log);
+        userService.saveUser(user);
 
         return authResponse;
     }

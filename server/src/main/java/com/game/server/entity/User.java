@@ -10,11 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -58,6 +62,9 @@ public class User {
     @JoinColumn(name = "budget_id")
     private Budget budget;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Log> logs;
+
 
     public User(String username, String password, String email, String phoneNumber, String role, String symbol, AuthProvider provider, String dateOfJoin) {
         this.username = username;
@@ -70,5 +77,12 @@ public class User {
         this.dateOfJoin = dateOfJoin;
     }
 
+    public void addLog(Log log) {
+        if(logs == null) {
+            logs = new ArrayList<>();
+        }
+        logs.add(log);
+        log.setUser(this);
+    }
 
 }
