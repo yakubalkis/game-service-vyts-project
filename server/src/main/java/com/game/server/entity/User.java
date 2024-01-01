@@ -65,6 +65,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Log> logs;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
+
 
     public User(String username, String password, String email, String phoneNumber, String role, String symbol, AuthProvider provider, String dateOfJoin) {
         this.username = username;

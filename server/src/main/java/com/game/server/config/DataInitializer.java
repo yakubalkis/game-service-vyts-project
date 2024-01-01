@@ -1,7 +1,9 @@
 package com.game.server.config;
 
+import com.game.server.entity.Item;
 import com.game.server.entity.Level;
 import com.game.server.entity.Rank;
+import com.game.server.repository.ItemRepository;
 import com.game.server.repository.LevelRepository;
 import com.game.server.repository.RankRepository;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +19,7 @@ public class DataInitializer {
 
     private final LevelRepository levelRepository;
     private final RankRepository rankRepository;
+    private final ItemRepository itemRepository;
 
     @PostConstruct
     public void createLevelAndRanks() {
@@ -39,5 +42,17 @@ public class DataInitializer {
 
         /*levelRepository.saveAll(levels);
         rankRepository.saveAll(ranks);*/
+    }
+
+    @PostConstruct
+    public void createItems() {
+        List<Item> items = Arrays.asList(
+                new Item("Forma", "forma.png"),
+                new Item("Atesli Forma", "atesli-forma.png"),
+                new Item("Krampon", "krampon.png"),
+                new Item("Eldiven", "eldiven.png"),
+                new Item("Sapka", "sapka.png")
+        );
+        //itemRepository.saveAll(items);
     }
 }
