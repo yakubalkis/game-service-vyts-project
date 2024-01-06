@@ -45,7 +45,7 @@ public class LevelAndRankController {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = now.format(formatter);
                     String message = "User " + currentUser.getUsername() + " rank up to " + nextRank.getRankName() + " on " + formattedDateTime + ".";
-                    Log log = new Log(message,"auth");
+                    Log log = new Log(message,"rank");
                     currentUser.addLog(log);// rank atladı loglandı
                     userService.saveUser(currentUser);
 
@@ -69,7 +69,7 @@ public class LevelAndRankController {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = now.format(formatter);
                     String message = "User " + currentUser.getUsername() + " rank low to " + previousRank.getRankName() + " on " + formattedDateTime + ".";
-                    Log log = new Log(message,"auth");
+                    Log log = new Log(message,"rank");
                     currentUser.addLog(log);// rank düştü loglandı
                     userService.saveUser(currentUser);
                     return "Rank decreased, play hard!";
@@ -107,7 +107,7 @@ public class LevelAndRankController {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = now.format(formatter);
                     String message = "User " + user.getUsername() + " leveled up to " + nextLevel.getLevelName() + " on " + formattedDateTime + ".";
-                    Log log = new Log(message,"auth");
+                    Log log = new Log(message,"level");
                     user.addLog(log);//level atladı loglandı
                     userService.saveUser(user);
                     return "Level increased, congratulations!";
