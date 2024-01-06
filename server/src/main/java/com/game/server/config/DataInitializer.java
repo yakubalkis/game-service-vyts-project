@@ -1,8 +1,10 @@
 package com.game.server.config;
 
+import com.game.server.entity.Category;
 import com.game.server.entity.Item;
 import com.game.server.entity.Level;
 import com.game.server.entity.Rank;
+import com.game.server.repository.CategoryRepository;
 import com.game.server.repository.ItemRepository;
 import com.game.server.repository.LevelRepository;
 import com.game.server.repository.RankRepository;
@@ -20,7 +22,7 @@ public class DataInitializer {
     private final LevelRepository levelRepository;
     private final RankRepository rankRepository;
     private final ItemRepository itemRepository;
-
+    private final CategoryRepository categoryRepository;
     @PostConstruct
     public void createLevelAndRanks() {
 
@@ -43,11 +45,20 @@ public class DataInitializer {
         /*levelRepository.saveAll(levels);
         rankRepository.saveAll(ranks);*/
     }
-
+    @PostConstruct
+    public void createCategories() {
+        List<Category> categories = Arrays.asList(
+                new Category("Forma", "formaCategory.png"),
+                new Category("Krampon", "kramponCategory.png"),
+                new Category("Eldiven", "eldivenCategory.png"),
+                new Category("Sapka", "sapkaCategory.png")
+        );
+        //categoryRepository.saveAll(categories);
+    }
     @PostConstruct
     public void createItems() {
         List<Item> items = Arrays.asList(
-                new Item("Forma", "forma.png"),
+                new Item("Forma", "forma.png" ),
                 new Item("Atesli Forma", "atesli-forma.png"),
                 new Item("Krampon", "krampon.png"),
                 new Item("Eldiven", "eldiven.png"),
