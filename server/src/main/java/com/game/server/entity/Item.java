@@ -1,14 +1,6 @@
 package com.game.server.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +21,10 @@ public class Item {
 
     private String symbol;
 
+    @ManyToOne
+    @JoinColumn(name = "category")
+    private Category category;
+
     @ManyToMany
     @JoinTable(
             name = "inventory_item",
@@ -40,6 +36,7 @@ public class Item {
     public Item(String itemName, String symbol) {
         this.itemName = itemName;
         this.symbol = symbol;
+
     }
 
     public void addInventory(Inventory inventory) { // simdilik gerekli degil ama dursun

@@ -1,13 +1,7 @@
 package com.game.server.config;
 
-import com.game.server.entity.Category;
-import com.game.server.entity.Item;
-import com.game.server.entity.Level;
-import com.game.server.entity.Rank;
-import com.game.server.repository.CategoryRepository;
-import com.game.server.repository.ItemRepository;
-import com.game.server.repository.LevelRepository;
-import com.game.server.repository.RankRepository;
+import com.game.server.entity.*;
+import com.game.server.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +17,7 @@ public class DataInitializer {
     private final RankRepository rankRepository;
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    private final SpecialityRepository specialityRepository;
     @PostConstruct
     public void createLevelAndRanks() {
 
@@ -53,12 +48,24 @@ public class DataInitializer {
                 new Category("Eldiven", "eldivenCategory.png"),
                 new Category("Sapka", "sapkaCategory.png")
         );
+
         //categoryRepository.saveAll(categories);
     }
     @PostConstruct
+    public void createSpecialities() {
+        List<Speciality> specialities = Arrays.asList(
+                new Speciality("Falso", "Topa Vurulduğunda Falso Almasını Sağlar.","Falso.png",15),
+                new Speciality("Sert Şut", "Topa Daha Sert Vurulmasını Sağlar.","SertSut.png",20)
+
+        );
+
+        //specialityRepository.saveAll(specialities);
+    }
+
+    @PostConstruct
     public void createItems() {
         List<Item> items = Arrays.asList(
-                new Item("Forma", "forma.png" ),
+                new Item("Forma", "forma.png"),
                 new Item("Atesli Forma", "atesli-forma.png"),
                 new Item("Krampon", "krampon.png"),
                 new Item("Eldiven", "eldiven.png"),
