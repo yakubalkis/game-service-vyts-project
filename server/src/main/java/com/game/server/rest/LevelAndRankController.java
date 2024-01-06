@@ -1,6 +1,7 @@
 package com.game.server.rest;
 
 import com.game.server.entity.Level;
+import com.game.server.entity.Log;
 import com.game.server.entity.Rank;
 import com.game.server.entity.User;
 import com.game.server.rest.dto.RiseRequest;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,14 +29,62 @@ public class LevelAndRankController {
     @PutMapping("/rank")
     public String changeRank(@RequestBody RiseRequest request) {
         User currentUser = userService.getUserByUsername(request.getUsername());
-        if(request.getProcessType().equals("increase")) { // TO-DO: bu kisim yapilacak
+        Rank currentRank=rankService.findByRankName(currentUser.getRank().getRankName());
+        if(request.getProcessType().equals("increase")) { // rank veya point arttır
+            Integer addedPoint=currentUser.getRankPointOfUser()+ request.getPoint();
+
+            if(currentRank.getId() !=5) {// Buradaki 5, rank tablosundaki son rankın id si olacak!
+                Rank nextRank=rankService.findById(currentRank.getId()+1);
+
+                if(addedPoint >= nextRank.getMinPoint()) { //rank arttır
+                    currentUser.setRank(nextRank);
+                    currentUser.setRankPointOfUser(addedPoint);
+                    userService.saveUser(currentUser);
+                    //log
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedDateTime = now.format(formatter);
+                    String message = "User " + currentUser.getUsername() + " rank up to " + nextRank.getRankName() + " on " + formattedDateTime + ".";
+                    Log log = new Log(message,"auth");
+                    currentUser.addLog(log);// rank atladı loglandı
+                    userService.saveUser(currentUser);
+
+                    return "Rank increased, congratulations!";
+                }
+            }
+            currentUser.setRankPointOfUser(addedPoint); // rank atlama yok, puani ekle kaydet
+            userService.saveUser(currentUser);
+        }
+        else if(request.getProcessType().equals("decrease")) {// rank veya point düşür
+            Integer subtractedPoint =currentUser.getRankPointOfUser()- request.getPoint();
+
+            if(currentRank.getId() !=1) {//Buradaki 1, rank tablosundaki ilk rankın id si olacak!
+                Rank previousRank=rankService.findById(currentRank.getId()-1);
+                if(subtractedPoint<currentRank.getMinPoint()) {
+                    currentUser.setRank(previousRank);
+                    currentUser.setRankPointOfUser(subtractedPoint);
+                    userService.saveUser(currentUser);
+                    //log
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedDateTime = now.format(formatter);
+                    String message = "User " + currentUser.getUsername() + " rank low to " + previousRank.getRankName() + " on " + formattedDateTime + ".";
+                    Log log = new Log(message,"auth");
+                    currentUser.addLog(log);// rank düştü loglandı
+                    userService.saveUser(currentUser);
+                    return "Rank decreased, play hard!";
+                }
+            }
+            if(subtractedPoint >= 100) { // rank düsme yok, puani ekle kaydet
+                currentUser.setRankPointOfUser(subtractedPoint);
+            } else { // puan 100 den asagi düsmemeli o zaten baslangic puani
+                currentUser.setRankPointOfUser(100);
+            }
+            userService.saveUser(currentUser);
 
         }
-        else if(request.getProcessType().equals("decrease")) {
 
-        }
-
-        return null;
+        return "Changed rank point. ";
     }
 
     @PutMapping("/level")
@@ -50,29 +102,18 @@ public class LevelAndRankController {
                     user.setLevel(nextLevel);
                     user.setLevelPointOfUser(addedPoint);
                     userService.saveUser(user);
-                    return "Level increased, congratulations!"; // loglansin bu returnden önce, seviye atladi cünkü
+                    // log
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedDateTime = now.format(formatter);
+                    String message = "User " + user.getUsername() + " leveled up to " + nextLevel.getLevelName() + " on " + formattedDateTime + ".";
+                    Log log = new Log(message,"auth");
+                    user.addLog(log);//level atladı loglandı
+                    userService.saveUser(user);
+                    return "Level increased, congratulations!";
                 }
             }
             user.setLevelPointOfUser(addedPoint); // seviye atlama yok, puani ekle kaydet
-            userService.saveUser(user);
-        }
-        else if(request.getProcessType().equals("decrease")) { // level veya point azalt
-            Integer substractedPoint = user.getLevelPointOfUser() - request.getPoint();
-
-            if(currentLevel.getId() != 1) { // id 1 den öncesi yok o yüzden check
-                Level previousLevel = levelService.findById(currentLevel.getId()-1);
-                if(substractedPoint < currentLevel.getMinPoint()) {
-                    user.setLevel(previousLevel);
-                    user.setLevelPointOfUser(substractedPoint);
-                    userService.saveUser(user);
-                    return "Level decreased, play hard!"; // loglansin bu returnden önce, seviye düstü cünkü
-                }
-            }
-            if(substractedPoint >= 100) { // seviye düsme yok, puani ekle kaydet
-                user.setLevelPointOfUser(substractedPoint);
-            } else { // puan 100 den asagi düsmemeli o zaten baslangic puani
-                user.setLevelPointOfUser(100);
-            }
             userService.saveUser(user);
         }
 
