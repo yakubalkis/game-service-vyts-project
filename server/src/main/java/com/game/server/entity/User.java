@@ -73,6 +73,8 @@ public class User {
     @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Purchase> purchases;
 
     public User(String username, String password, String email, String phoneNumber, String role, String symbol, AuthProvider provider, String dateOfJoin) {
         this.username = username;
@@ -91,6 +93,14 @@ public class User {
         }
         logs.add(log);
         log.setUser(this);
+    }
+
+    public void addPurchase(Purchase purchase) {
+        if (purchases == null) {
+            purchases = new ArrayList<>();
+        }
+        purchases.add(purchase);
+        purchase.setUser(this);
     }
 
 }

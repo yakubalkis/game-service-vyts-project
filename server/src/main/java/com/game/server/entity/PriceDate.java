@@ -27,6 +27,6 @@ public class PriceDate {
     private String priceType;
 
     @ManyToOne
-    @JoinColumn(name = "item")
+    @JoinColumn(name = "item_id")
     private Item item;
 }
