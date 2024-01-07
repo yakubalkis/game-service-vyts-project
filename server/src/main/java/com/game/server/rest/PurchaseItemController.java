@@ -1,7 +1,8 @@
-package com.game.server.rest.dto;
+package com.game.server.rest;
 
 import com.game.server.entity.Item;
 import com.game.server.entity.Purchase;
+import com.game.server.rest.dto.PurchaseRequest;
 import com.game.server.service.ItemService;
 import com.game.server.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,9 @@ public class PurchaseItemController {
 
     @PostMapping
     public String setItemToPurchase(@RequestBody PurchaseRequest request) {
-
-        Item item = itemService.findById(request.getId());
+        // TO-DO: satin alinan item, userin item listesine eklencek ve kaydedilecek
+        // Cüzdan bakiye kontrolü yapilmali!!
+        Item item = itemService.findById(request.getItemId());
         Purchase purchase = purchaseService.findById(request.getPurchaseId());
 
         purchase.addItem(item);
@@ -33,7 +35,7 @@ public class PurchaseItemController {
 
     @DeleteMapping
     public String deleteItemfromPurchase(@RequestBody PurchaseRequest request) {
-        Item item = itemService.findById(request.getId());
+        Item item = itemService.findById(request.getItemId());
         Purchase purchase = purchaseService.findById(request.getPurchaseId());
 
 

@@ -29,6 +29,7 @@ public class DataInitializer {
     private final CategoryRepository categoryRepository;
     private final SpecialityRepository specialityRepository;
     private final PurchaseRepository purchaseRepository;
+
     @PostConstruct
     public void createLevelAndRanks() {
 
@@ -51,6 +52,7 @@ public class DataInitializer {
         /*levelRepository.saveAll(levels);
         rankRepository.saveAll(ranks);*/
     }
+
     @PostConstruct
     public void createCategories() {
         List<Category> categories = Arrays.asList(
@@ -62,6 +64,7 @@ public class DataInitializer {
 
         //categoryRepository.saveAll(categories);
     }
+
     @PostConstruct
     public void createSpecialities() {
         List<Speciality> specialities = Arrays.asList(
@@ -84,15 +87,5 @@ public class DataInitializer {
         );
         //itemRepository.saveAll(items);
     }
-    @PostConstruct
-    public void createPurchases() {
-        List<Purchase> purchases = Arrays.asList(
-                new Purchase(150, "15/12/2023",5,"Nakit"),
-                new Purchase(200, "5/12/2023",2,"Oyun Parası"),
-                new Purchase(100, "2/12/2023",1,"Nakit"),
-                new Purchase(500, "25/12/2023",10,"Oyun Parası"),
-                new Purchase(1000, "2/01/2024",1,"Nakit")
-        );
-        //purchaseRepository.saveAll(purchases);
-    }
+
 }
