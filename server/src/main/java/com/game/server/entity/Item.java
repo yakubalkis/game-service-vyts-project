@@ -1,5 +1,6 @@
 package com.game.server.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +51,11 @@ public class Item {
     )
     private List<Purchase> purchases;
 
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<PriceDate>priceDates;
+
+
     public Item(String itemName, String symbol) {
         this.itemName = itemName;
         this.symbol = symbol;
@@ -60,6 +67,20 @@ public class Item {
             inventories = new ArrayList<>();
         }
         inventories.add(inventory);
+    }
+
+    public void addPriceDate(PriceDate priceDate) { // simdilik gerekli degil ama dursun
+        if(priceDates == null) {
+            priceDates = new ArrayList<>();
+        }
+        priceDates.add(priceDate);
+        priceDate.setItem(this);
+    }
+
+    // trigger yada advance sorgu kullanilabilir, birden cok priceDate var ve güncel tarih icin gecerli olan gelmeli
+    public PriceDate getCurrentPriceDate() { // bu method PriceDateRepository'de de yazilabilir sql query method ile
+                                            // methodun burada olmasi sart degil sadece hatirlatma icin
+        return null;
     }
 
 }
