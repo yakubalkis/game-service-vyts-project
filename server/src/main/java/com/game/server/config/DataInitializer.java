@@ -1,11 +1,17 @@
 package com.game.server.config;
 
+import com.game.server.entity.Category;
 import com.game.server.entity.Item;
 import com.game.server.entity.Level;
+import com.game.server.entity.Purchase;
 import com.game.server.entity.Rank;
+import com.game.server.entity.Speciality;
+import com.game.server.repository.CategoryRepository;
 import com.game.server.repository.ItemRepository;
 import com.game.server.repository.LevelRepository;
+import com.game.server.repository.PurchaseRepository;
 import com.game.server.repository.RankRepository;
+import com.game.server.repository.SpecialityRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +26,9 @@ public class DataInitializer {
     private final LevelRepository levelRepository;
     private final RankRepository rankRepository;
     private final ItemRepository itemRepository;
-
+    private final CategoryRepository categoryRepository;
+    private final SpecialityRepository specialityRepository;
+    private final PurchaseRepository purchaseRepository;
     @PostConstruct
     public void createLevelAndRanks() {
 
@@ -43,6 +51,27 @@ public class DataInitializer {
         /*levelRepository.saveAll(levels);
         rankRepository.saveAll(ranks);*/
     }
+    @PostConstruct
+    public void createCategories() {
+        List<Category> categories = Arrays.asList(
+                new Category("Forma", "formaCategory.png"),
+                new Category("Krampon", "kramponCategory.png"),
+                new Category("Eldiven", "eldivenCategory.png"),
+                new Category("Sapka", "sapkaCategory.png")
+        );
+
+        //categoryRepository.saveAll(categories);
+    }
+    @PostConstruct
+    public void createSpecialities() {
+        List<Speciality> specialities = Arrays.asList(
+                new Speciality("Falso", "Topa Vurulduğunda Falso Almasını Sağlar.","Falso.png",15),
+                new Speciality("Sert Şut", "Topa Daha Sert Vurulmasını Sağlar.","SertSut.png",20)
+
+        );
+
+        //specialityRepository.saveAll(specialities);
+    }
 
     @PostConstruct
     public void createItems() {
@@ -54,5 +83,16 @@ public class DataInitializer {
                 new Item("Sapka", "sapka.png")
         );
         //itemRepository.saveAll(items);
+    }
+    @PostConstruct
+    public void createPurchases() {
+        List<Purchase> purchases = Arrays.asList(
+                new Purchase(150, "15/12/2023",5,"Nakit"),
+                new Purchase(200, "5/12/2023",2,"Oyun Parası"),
+                new Purchase(100, "2/12/2023",1,"Nakit"),
+                new Purchase(500, "25/12/2023",10,"Oyun Parası"),
+                new Purchase(1000, "2/01/2024",1,"Nakit")
+        );
+        //purchaseRepository.saveAll(purchases);
     }
 }

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+
+    // TO-DO: buraya itemin bütün price datelerini getiren method yazılacak
 }
