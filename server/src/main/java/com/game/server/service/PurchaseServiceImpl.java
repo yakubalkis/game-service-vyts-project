@@ -1,6 +1,5 @@
 package com.game.server.service;
 
-import com.game.server.entity.Item;
 import com.game.server.entity.Purchase;
 import com.game.server.repository.PurchaseRepository;
 import lombok.RequiredArgsConstructor;

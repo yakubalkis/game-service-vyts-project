@@ -1,7 +1,17 @@
 package com.game.server.config;
 
-import com.game.server.entity.*;
-import com.game.server.repository.*;
+import com.game.server.entity.Category;
+import com.game.server.entity.Item;
+import com.game.server.entity.Level;
+import com.game.server.entity.Purchase;
+import com.game.server.entity.Rank;
+import com.game.server.entity.Speciality;
+import com.game.server.repository.CategoryRepository;
+import com.game.server.repository.ItemRepository;
+import com.game.server.repository.LevelRepository;
+import com.game.server.repository.PurchaseRepository;
+import com.game.server.repository.RankRepository;
+import com.game.server.repository.SpecialityRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
