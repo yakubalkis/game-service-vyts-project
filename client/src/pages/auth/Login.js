@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import googleLogo from '../../img/google-logo.png';
 import githubLogo from '../../img/github-logo.png';
-import images from '../../img/images1.png';
+import game_background from '../../img/ball-game.jpeg';
 import { getSocialLoginUrl } from "../../utils/Helpers";
 const API_LOGIN_URL = "http://localhost:8080/auth/login";
 
@@ -39,7 +39,7 @@ export default function Login(){
         }
         else{setLabelWarning(() => "");}
 
-        let userRequest = {username: inputAll.username, password: inputAll.password}; // create laborant request object to send backend
+        let userRequest = {username: inputAll.username, password: inputAll.password}; // create user request object to send backend
 
         axios.post(API_LOGIN_URL, userRequest) // request to login
             .then(res => {
@@ -60,7 +60,7 @@ export default function Login(){
             <div className="row border rounded-5 p-3 bg-white shadow box-area">
                 <div className="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
                     <div className="featured-image mb-3">
-                        <img src={images}  className="img-fluid" style={{ width: '250px' }} alt="Featured" />
+                        <img src={game_background}  className="img-fluid" style={{ width: '250px' }} alt="Featured" />
                     </div>
                     <p className="text-white fs-2" style={{ fontFamily: 'Courier New', fontWeight: 600 }}>Be Verified</p>
                     <small className="text-white text-wrap text-center" style={{ width: '17rem', fontFamily: 'Courier New' }}>
