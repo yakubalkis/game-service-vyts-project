@@ -37,7 +37,7 @@ public class PriceDateServiceImpl implements PriceDateService{
 
         return item;
     }
-    //public List<PriceDate> findPriceDatesByItemId(Long id){return priceDateRepository.findPriceDatesByItemId(id);}
+
     @Override
     public void deleteById(Long id) {
         priceDateRepository.deleteById(id);

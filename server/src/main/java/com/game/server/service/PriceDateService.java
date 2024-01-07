@@ -12,6 +12,6 @@ public interface PriceDateService {
 
     PriceDate findById(Long id);
 
-    //List<PriceDate> findPriceDatesByItemId(Long id);
+
     void deleteById(Long id);
 }
