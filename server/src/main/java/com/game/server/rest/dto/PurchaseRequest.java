@@ -3,7 +3,8 @@ package com.game.server.rest.dto;
 import lombok.Data;
 
 @Data
-public class CategoryRequest {
-    private Long itemId;
+public class PurchaseRequest {
+
     private Long id;
+    private Long purchaseId;
 }

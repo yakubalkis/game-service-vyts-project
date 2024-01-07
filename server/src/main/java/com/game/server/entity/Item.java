@@ -33,6 +33,14 @@ public class Item {
     )
     private List<Inventory> inventories;
 
+    @ManyToMany
+    @JoinTable(
+            name = "purchase_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name ="purchase_id")
+    )
+    private List<Purchase> purchases;
+
     public Item(String itemName, String symbol) {
         this.itemName = itemName;
         this.symbol = symbol;

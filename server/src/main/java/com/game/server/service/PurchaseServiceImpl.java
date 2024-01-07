@@ -1,5 +1,6 @@
 package com.game.server.service;
 
+import com.game.server.entity.Item;
 import com.game.server.entity.Purchase;
 import com.game.server.repository.PurchaseRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
+
     private final PurchaseRepository purchaseRepository;
     @Override
     public List<Purchase> findAll() {
@@ -30,9 +32,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         return purchase;
     }
-
     @Override
-    public void save(Purchase purchase) {
+    public void savePurchase(Purchase purchase) {
         purchaseRepository.save(purchase);
     }
 }

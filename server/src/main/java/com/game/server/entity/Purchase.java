@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -21,10 +24,30 @@ public class Purchase {
 
     private String priceType;
 
+    @ManyToMany
+    @JoinTable(
+            name = "purchase_item",
+            joinColumns = @JoinColumn(name = "purchase_id"),
+            inverseJoinColumns = @JoinColumn(name ="item_id")
+    )
+    private List<Item> items;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+
+    public void addItem(Item item) {
+        if(items == null) {
+            items = new ArrayList<>();
+        }
+        items.add(item);
+    }
+    public void deleteItem(Item item) {
+        if(items != null) {
+            items.remove(item);
+        }
+    }
     public Purchase(int purchasePrice, String purchaseDate,int amount,String priceType) {
         this.purchasePrice = purchasePrice;
         this.purchaseDate = purchaseDate;

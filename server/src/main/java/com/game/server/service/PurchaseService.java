@@ -10,7 +10,7 @@ public interface PurchaseService {
 
     Purchase findById(Long id);
 
-    void save(Purchase purchase);
+    void savePurchase(Purchase purchase);
 
 
 }
