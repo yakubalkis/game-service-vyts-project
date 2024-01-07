@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import googleLogo from '../../img/google-logo.png';
 import githubLogo from '../../img/github-logo.png';
+import images from '../../img/images1.png';
 import { getSocialLoginUrl } from "../../utils/Helpers";
 const API_LOGIN_URL = "http://localhost:8080/auth/login";
 
@@ -54,54 +55,70 @@ export default function Login(){
             .catch(res => setLabelWarning(() => "Invalid Username No or Password!")); // error message
     }
 
-    return(
-        <div className="row">
-                <div className="col-md-6 col-md-offset-3">
-
-                    <br></br>
-                    <h1>User Login Page</h1>
-
-                    <div className="card-body">
+    return (
+        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="row border rounded-5 p-3 bg-white shadow box-area">
+                <div className="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                    <div className="featured-image mb-3">
+                        <img src={images}  className="img-fluid" style={{ width: '250px' }} alt="Featured" />
+                    </div>
+                    <p className="text-white fs-2" style={{ fontFamily: 'Courier New', fontWeight: 600 }}>Be Verified</p>
+                    <small className="text-white text-wrap text-center" style={{ width: '17rem', fontFamily: 'Courier New' }}>
+                        Join experienced Designers on this platform.
+                    </small>
+                </div>
+                <div className="col-md-6 right-box">
+                    <div className="row align-items-center">
+                        <div className="header-text mb-4">
+                            <h2>Hello, Again</h2>
+                            <p>We are happy to have you back.</p>
+                        </div>
                         <form>
-
                             <div className="form-group">
                                 <label>Username: </label>
-                                <input className="form-control" placeholder="Username" type="text" name="username" value={inputAll.username}  onChange={handleChange}/>
-                            </div><br></br>
-
+                                <input className="form-control form-control-lg bg-light fs-6" placeholder="Username" type="text" name="username" value={inputAll.username} onChange={handleChange} />
+                            </div>
+                            <br />
                             <div className="form-group">
                                 <label>Password: </label>
-                                <input className="form-control" placeholder="Password" type="text" name="password" value={inputAll.password}  onChange={handleChange}/>
-                            </div><br></br>
+                                <input className="form-control form-control-lg bg-light fs-6" placeholder="Password" type="password" name="password" value={inputAll.password} onChange={handleChange} />
+                            </div>
+                            <br />
                             
                             <div className="form-group">
-
-                                <button type="submit" className="btn btn-success" onClick={handleLogin}>Login</button>
-                                <span style={{marginLeft: "1rem"}}>New user?
-                                   <Link to="/">
-                                        <span style={{marginLeft: "3px"}}>Sign Up</span>
-                                   </Link>
-                                </span>
-                                
+                                <button type="submit" className="btn btn-lg btn-primary w-100 fs-6" onClick={handleLogin}>Login</button>
                             </div>
-
-                            <label  style={{marginLeft: "0.5rem", color: "red"}}>{labelWarning}</label>
-
+                        
+                            <div className="row">
+                                <small>Don't have an account? <Link to="/">Sign Up</Link></small>
+                            </div>
+                            <label style={{ marginLeft: '0.5rem', color: 'red' }}>{labelWarning}</label>
                         </form>
                         <div className="social-login">
-                            <a className="btn btn-block social-btn google" href={getSocialLoginUrl('google')}>
-                                <img src={googleLogo} alt="Google" />
-                                <label>Log in with Google</label>
-                            </a>
-                            
-                            <a className="btn btn-block social-btn github" href={getSocialLoginUrl('github')}>
-                                <img src={githubLogo} alt="Github" /> 
-                                <label>Log in with Github</label>
-                            </a>
+                        <div className="row">
+                                <div className="col-2">
+                                    <a className="btn social-btn google" href={getSocialLoginUrl('google')}>
+                                        <img src={googleLogo} alt="Google" style={{ height: '30px' }} />
+                                    </a>
+                                </div>
+                                <div className="col-10 d-flex align-items-center">
+                                    <label style={{ marginBottom: '0' }}>Log in with Google</label>
+                                </div>
+                            </div>
+                            <div className="row mt-2"> {/* Added margin-top for better alignment */}
+                            <div className="col-2">
+                                <a className="btn social-btn github" href={getSocialLoginUrl('github')}>
+                                    <img src={githubLogo} alt="Github" style={{ height: '30px' }} />
+                                </a>
+                            </div>
+                            <div className="col-10 d-flex align-items-center">
+                                <label style={{ marginBottom: '0' }}>Log in with Github</label>
+                            </div>
+                        </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-    )
+        </div>
+    );
 }
