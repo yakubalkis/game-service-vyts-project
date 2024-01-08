@@ -1,5 +1,6 @@
 package com.game.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +33,7 @@ public class Purchase {
 
     private String priceType;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "purchase_item",
@@ -40,6 +42,7 @@ public class Purchase {
     )
     private List<Item> items;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -2,6 +2,7 @@ package com.game.server.rest;
 
 import com.game.server.entity.User;
 import com.game.server.mapper.UserMapper;
+import com.game.server.rest.dto.CustomUserDto;
 import com.game.server.rest.dto.UserDto;
 import com.game.server.security.JwtUserDetails;
 import com.game.server.service.UserService;
@@ -36,11 +37,10 @@ public class UserController {
         return userMapper.toUserDto(user);
     }
 
-    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
-    public List<UserDto> getUsers() {
+    public List<CustomUserDto> getUsers() {
         return userService.getUsers().stream()
-                .map(userMapper::toUserDto)
+                .map(userMapper::toCustomUserDto)
                 .collect(Collectors.toList());
     }
 

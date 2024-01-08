@@ -7,4 +7,5 @@ public class PurchaseRequest {
 
     private String username;
     private Long itemId;
+    private Integer amount; // adet
 }
