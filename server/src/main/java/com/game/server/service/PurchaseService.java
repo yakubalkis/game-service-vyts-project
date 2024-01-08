@@ -11,6 +11,5 @@ public interface PurchaseService {
     Purchase findById(Long id);
 
     void savePurchase(Purchase purchase);
-
-
+    List<Object[]> getUserPurchaseDetailsByDate (Long userId);
 }
