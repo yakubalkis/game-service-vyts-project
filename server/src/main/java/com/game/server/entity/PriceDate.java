@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "priceDate")
+@Table(name = "price_date")
 public class PriceDate {
 
     @Id
@@ -27,6 +27,6 @@ public class PriceDate {
     private String priceType;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item")
     private Item item;
 }

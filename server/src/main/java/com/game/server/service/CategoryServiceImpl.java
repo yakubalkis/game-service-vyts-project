@@ -5,13 +5,17 @@ import com.game.server.entity.Category;
 import com.game.server.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
     private final CategoryRepository categoryRepository;
+    private final ExcelImportService excelImportService;
 
     @Override
     public List<Category> findAll() {
@@ -41,4 +45,21 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
     }
+
+    public void saveCategoriesToDatabase(MultipartFile file){
+
+        if(excelImportService.isValidExcelFile(file)){
+            try {
+                List<Category> categories = excelImportService.getCategoriesDataFromExcel(file.getInputStream());
+                this.categoryRepository.saveAll(categories);
+
+            } catch (IOException e) {
+
+                throw new IllegalArgumentException("The file is not a valid excel file");
+
+            }
+        }
+
+    }
+
 }
