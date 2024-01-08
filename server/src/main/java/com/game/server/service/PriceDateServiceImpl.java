@@ -4,7 +4,9 @@ import com.game.server.entity.PriceDate;
 import com.game.server.repository.PriceDateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class PriceDateServiceImpl implements PriceDateService{
 
     private final PriceDateRepository priceDateRepository;
+    private final ExcelImportService excelImportService;
 
     @Override
     public List<PriceDate> findAll() {
@@ -37,6 +40,23 @@ public class PriceDateServiceImpl implements PriceDateService{
 
         return item;
     }
+
+    public void savePriceDatesToDatabase(MultipartFile file){
+
+        if(excelImportService.isValidExcelFile(file)){
+            try {
+                List<PriceDate> priceDates = excelImportService.getPriceDatesDataFromExcel(file.getInputStream());
+                this.priceDateRepository.saveAll(priceDates);
+
+            } catch (IOException e) {
+
+                throw new IllegalArgumentException("The file is not a valid excel file");
+
+            }
+        }
+
+    }
+
 
     @Override
     public void deleteById(Long id) {
