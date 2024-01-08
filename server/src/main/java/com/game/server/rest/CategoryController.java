@@ -30,13 +30,9 @@ public class CategoryController {
         this.categoryService.saveCategoriesToDatabase(file);
         return ResponseEntity.ok(Map.of("Message","Categories data uploaded and saved to database successfully"));
     }
-
-
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories(){
-
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.FOUND);
-
+    public List<Category> getCategories(){
+        return categoryService.findAll();
     }
 
 }

@@ -36,4 +36,10 @@ public class ItemController {
 
     }
 
+
+    @GetMapping("/inventory-user-counts")
+    public List<Object[]> getInventoryUserCountsGroupByItem() {
+        return itemService.getInventoryUserCountsGroupByItem();
+    }
+
 }

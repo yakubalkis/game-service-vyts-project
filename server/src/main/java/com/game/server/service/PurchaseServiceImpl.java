@@ -35,4 +35,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     public void savePurchase(Purchase purchase) {
         purchaseRepository.save(purchase);
     }
+
+    @Override
+    public List<Object[]> getUserPurchaseDetailsByDate (Long userId) {
+        return purchaseRepository.findTotalPurchaseDetailsByUserAndDate(userId);
+    }
+
 }

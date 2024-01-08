@@ -61,5 +61,8 @@ public class ItemServiceImpl implements ItemService {
         }
 
     }
+    public List<Object[]> getInventoryUserCountsGroupByItem() {
+        return itemRepository.getInventoryUserCountsGroupByItem();
+    }
 
 }

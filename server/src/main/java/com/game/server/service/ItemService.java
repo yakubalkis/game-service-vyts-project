@@ -17,5 +17,6 @@ public interface ItemService {
     void deleteById(Long id);
 
     public void saveItemsToDatabase(MultipartFile file);
+    List<Object[]> getInventoryUserCountsGroupByItem();
 
 }

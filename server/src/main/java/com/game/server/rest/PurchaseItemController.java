@@ -10,6 +10,9 @@ import com.game.server.service.ItemService;
 import com.game.server.service.PurchaseService;
 import com.game.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +48,8 @@ public class PurchaseItemController {
             user.getInventory().addItem(item); // cantaya ekle
 
             Budget budget = user.getBudget(); // cüzdan bakiyesinden düş
-            budget.setCurrentGameMoney(user.getBudget().getCurrentGameMoney() - 10);
+            budget.setCurrentGameMoney(user.getBudget().getCurrentGameMoney() - 10 * request.getAmount());
             user.setBudget(budget);
-
             purchase.addItem(item); // satin alima ekle
             purchase.setPurchaseDate(formattedDateTime);
             purchase.setPurchasePrice(10); // TO-DO: bu item in fiyati olacak
@@ -60,7 +62,6 @@ public class PurchaseItemController {
             Log log = new Log(message,"purchase");
             user.addLog(log);
             userService.saveUser(user);
-            purchaseService.savePurchase(purchase);
             return "Purchase process is successful.";
         }
         else {
@@ -72,6 +73,12 @@ public class PurchaseItemController {
     public List<Purchase> getAllPurchases() {
 
         return purchaseService.findAll();
+    }
+
+    @GetMapping("/purchase-details/{userId}")
+    public ResponseEntity<List<Object[]>> getTotalPurchaseDetailsByUser(@PathVariable Long userId) {
+        List<Object[]> purchaseDetails = purchaseService.getUserPurchaseDetailsByDate (userId);
+        return new ResponseEntity<>(purchaseDetails, HttpStatus.OK);
     }
 
 }

@@ -32,7 +32,7 @@ public class Item {
     private String symbol;
 
     @ManyToOne
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToMany
