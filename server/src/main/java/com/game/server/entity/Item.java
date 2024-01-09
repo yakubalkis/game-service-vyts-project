@@ -49,6 +49,15 @@ public class Item {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
+            name = "speciality_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name ="speciality_id")
+    )
+
+    private List<Speciality> specialities;
+
+    @ManyToMany
+    @JoinTable(
             name = "purchase_item",
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name ="purchase_id")
