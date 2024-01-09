@@ -1,5 +1,6 @@
 package com.game.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,10 +32,12 @@ public class Item {
 
     private String symbol;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade= {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "inventory_item",
@@ -43,6 +46,7 @@ public class Item {
     )
     private List<Inventory> inventories;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "purchase_item",
@@ -51,7 +55,7 @@ public class Item {
     )
     private List<Purchase> purchases;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<PriceDate>priceDates;
 

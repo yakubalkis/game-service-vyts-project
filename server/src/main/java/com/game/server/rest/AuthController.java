@@ -95,7 +95,7 @@ public class AuthController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
-        String message = "User logged in on " + formattedDateTime + ".";
+        String message = "User " + user.getUsername() +" logged in on " + formattedDateTime + ".";
         Log log = new Log(message , "auth");
         user.addLog(log);
         userService.saveUser(user);

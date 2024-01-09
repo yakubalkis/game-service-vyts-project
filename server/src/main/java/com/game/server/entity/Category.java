@@ -4,11 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -24,11 +26,21 @@ public class Category {
 
     private String symbol;
 
+    @OneToMany(mappedBy = "category")
+    private List<Item>  items;
+
 
     public Category(String categoryName, String symbol) {
         this.categoryName = categoryName;
         this.symbol = symbol;
     }
 
+    public void addItem(Item item) {
+        if(items == null) {
+            items = new ArrayList<>();
+        }
+        items.add(item);
+        item.setCategory(this);
+    }
 
 }

@@ -30,10 +30,9 @@ public class ItemController {
 
 
     @GetMapping
-    public ResponseEntity<List<Item>> getItems(){
-
-        return new ResponseEntity<>(itemService.findAll(), HttpStatus.FOUND);
-
+    public List<Item> getItems(){ // TO-DO: burada currentPriceDate dönüyo ama onun yerine current price dönmeli
+                                    // price isi sonrasi güncellenecek, gerekirse dto yazilsin
+        return itemService.findAll();
     }
 
 

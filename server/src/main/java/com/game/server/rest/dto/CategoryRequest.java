@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class CategoryRequest {
     private Long itemId;
-    private Long id;
+    private String categoryName;
+    private String symbol;
 }
