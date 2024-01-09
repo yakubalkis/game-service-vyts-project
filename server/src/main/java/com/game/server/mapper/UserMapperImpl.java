@@ -1,9 +1,11 @@
 package com.game.server.mapper;
 
 import com.game.server.entity.Item;
+import com.game.server.entity.Speciality;
 import com.game.server.entity.User;
 import com.game.server.rest.dto.CustomUserDto;
 import com.game.server.rest.dto.ItemDto;
+import com.game.server.rest.dto.SpecialityDto;
 import com.game.server.rest.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +40,15 @@ public class UserMapperImpl implements UserMapper {
             return new ItemDto(item.getId(), item.getItemName(), item.getSymbol(), null);
         }
         return new ItemDto(item.getId(), item.getItemName(), item.getSymbol(), item.getCategory().getCategoryName());
+    }
+
+    @Override
+    public SpecialityDto toSpecialityDto(Speciality speciality) {
+        if(speciality == null) {
+            return null;
+        }
+        return new SpecialityDto(speciality.getId(),
+                speciality.getSpecialityName(),speciality.getDescription(),
+                speciality.getSymbol(),speciality.getPowerAmount());
     }
 }
