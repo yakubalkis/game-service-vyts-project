@@ -15,8 +15,12 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -57,7 +61,7 @@ public class Item {
 
     @JsonIgnore
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private List<PriceDate>priceDates;
+    public List<PriceDate>priceDates;
 
 
     public Item(String itemName, String symbol) {
@@ -83,7 +87,29 @@ public class Item {
 
     // trigger yada advance sorgu kullanilabilir, birden cok priceDate var ve güncel tarih icin gecerli olan gelmeli
     public PriceDate getCurrentPriceDate() { // bu method PriceDateRepository'de de yazilabilir sql query method ile
-                                            // methodun burada olmasi sart degil sadece hatirlatma icin
+        if (priceDates != null && !priceDates.isEmpty()) {
+            LocalDate currentDate = LocalDate.now();
+            PriceDate latestExpiredPriceDate = null;
+
+            DateTimeFormatter databaseFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+            for (PriceDate priceDate : priceDates) {
+                try {
+                    LocalDate priceDateAsDate = LocalDate.parse(priceDate.getPriceDate(), databaseFormatter);
+                    if (latestExpiredPriceDate == null ||
+                            (latestExpiredPriceDate.getPriceDate() != null &&
+                                    priceDateAsDate.isAfter(LocalDate.parse(latestExpiredPriceDate.getPriceDate(), databaseFormatter)))) {
+                        latestExpiredPriceDate = priceDate;
+                    }
+
+                } catch (DateTimeParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return latestExpiredPriceDate;
+        }
+
         return null;
     }
 
