@@ -39,9 +39,16 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequest categoryRequest) {
-        Item item = itemService.findById(categoryRequest.getItemId());
         Category category = new Category(categoryRequest.getCategoryName(), categoryRequest.getSymbol());
-        category.addItem(item);
+
+        if(categoryRequest.getItemId() != null) { // bir item'a o category i baglayarak  olustur
+            try{
+                Item item = itemService.findById(categoryRequest.getItemId());
+                category.addItem(item);
+            } catch (RuntimeException error) {
+                return new ResponseEntity(error.getMessage(), HttpStatus.NOT_FOUND);
+            }
+        }
 
         categoryService.save(category);
         return ResponseEntity.ok(Map.of("Message","Added Category to database successfully"));
