@@ -5,6 +5,7 @@ import com.game.server.entity.PriceDate;
 import com.game.server.entity.Speciality;
 import com.game.server.repository.CategoryRepository;
 import com.game.server.repository.ItemRepository;
+import com.game.server.repository.SpecialityRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,6 +26,7 @@ public class ExcelImportService {
 
     public final CategoryRepository categoryRepository;
     public final ItemRepository itemRepository;
+    public final SpecialityRepository specialityRepository;
     public boolean isValidExcelFile(MultipartFile file){
         return Objects.equals(file.getContentType(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
     }
@@ -47,6 +49,7 @@ public class ExcelImportService {
                 Iterator<Cell> cellIterator = row.iterator();
                 int cellIndex = 0;
                 Item item = new Item();
+
                 while (cellIterator.hasNext()) {
 
 
@@ -60,6 +63,14 @@ public class ExcelImportService {
                         case 3 -> {
                             long longValue = (long) cell.getNumericCellValue();
                             item.setCategory(categoryRepository.getById(longValue));
+                        }
+                        case 4 -> {
+                            long longValue = (long) cell.getNumericCellValue();
+                            Speciality speciality = specialityRepository.getById(longValue);
+                            List<Speciality> specialitiesList = new ArrayList<>();
+                            specialitiesList.add(speciality);
+                            item.setSpecialities(specialitiesList);
+
                         }
                         default -> {
                         }

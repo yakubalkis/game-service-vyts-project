@@ -1,12 +1,11 @@
 package com.game.server.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -25,6 +24,14 @@ public class Speciality {
     private String symbol;
 
     private int powerAmount;
+
+    @ManyToMany
+    @JoinTable(
+            name = "speciality_item",
+            joinColumns = @JoinColumn(name = "speciality_id"),
+            inverseJoinColumns = @JoinColumn(name ="item_id")
+    )
+    private List<Item> items;
 
 
     public Speciality(String specialityName, String description, String symbol, int powerAmount) {
