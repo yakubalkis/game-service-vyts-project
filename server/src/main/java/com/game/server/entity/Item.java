@@ -98,17 +98,17 @@ public class Item {
     public PriceDate getCurrentPriceDate() { // bu method PriceDateRepository'de de yazilabilir sql query method ile
         if (priceDates != null && !priceDates.isEmpty()) {
             LocalDate currentDate = LocalDate.now();
-            PriceDate latestExpiredPriceDate = null;
+            PriceDate latestPriceDate = null;
 
             DateTimeFormatter databaseFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
             for (PriceDate priceDate : priceDates) {
                 try {
                     LocalDate priceDateAsDate = LocalDate.parse(priceDate.getPriceDate(), databaseFormatter);
-                    if (latestExpiredPriceDate == null ||
-                            (latestExpiredPriceDate.getPriceDate() != null &&
-                                    priceDateAsDate.isAfter(LocalDate.parse(latestExpiredPriceDate.getPriceDate(), databaseFormatter)))) {
-                        latestExpiredPriceDate = priceDate;
+
+                    if (priceDateAsDate.isEqual(currentDate) || (priceDateAsDate.isBefore(currentDate) &&
+                            (latestPriceDate == null || priceDateAsDate.isAfter(LocalDate.parse(latestPriceDate.getPriceDate(), databaseFormatter))))) {
+                        latestPriceDate = priceDate;
                     }
 
                 } catch (DateTimeParseException e) {
@@ -116,7 +116,7 @@ public class Item {
                 }
             }
 
-            return latestExpiredPriceDate;
+            return latestPriceDate;
         }
 
         return null;
