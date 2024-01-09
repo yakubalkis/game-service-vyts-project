@@ -33,6 +33,12 @@ public class PriceDateController {
         return ResponseEntity.ok(Map.of("Message","PriceDates data uploaded and saved to database successfully"));
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<?> createPriceDate() {
+
+        return null;
+    }
+
 
     @GetMapping
     public ResponseEntity<List<PriceDate>> getPriceDates(){

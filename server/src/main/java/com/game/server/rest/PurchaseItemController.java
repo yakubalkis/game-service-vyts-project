@@ -5,6 +5,8 @@ import com.game.server.entity.Item;
 import com.game.server.entity.Log;
 import com.game.server.entity.Purchase;
 import com.game.server.entity.User;
+import com.game.server.mapper.UserMapper;
+import com.game.server.rest.dto.PurchaseDto;
 import com.game.server.rest.dto.PurchaseRequest;
 import com.game.server.service.ItemService;
 import com.game.server.service.PurchaseService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class PurchaseItemController {
     private final PurchaseService purchaseService;
     private final ItemService itemService;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping
     public String setItemToPurchase(@RequestBody PurchaseRequest request) {
@@ -70,9 +74,11 @@ public class PurchaseItemController {
     }
 
     @GetMapping("/all")
-    public List<Purchase> getAllPurchases() {
+    public List<PurchaseDto> getAllPurchases() {
 
-        return purchaseService.findAll();
+        return purchaseService.findAll()
+                .stream().map(userMapper::toPurchaseDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/purchase-details/{userId}")

@@ -7,10 +7,13 @@ import com.game.server.rest.dto.ItemAddRequest;
 import com.game.server.rest.dto.ItemDto;
 import com.game.server.service.CategoryService;
 import com.game.server.service.ItemService;
+import com.game.server.service.PriceDateService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,7 @@ public class ItemController {
     private ItemService itemService;
     private final UserMapper userMapper;
     private final CategoryService categoryService;
+    private PriceDateService priceDateService;
 
     @PostMapping("")
     public ResponseEntity<?> uploadItemsData(@RequestParam("file")MultipartFile file){
@@ -62,6 +66,25 @@ public class ItemController {
     @GetMapping("/inventory-user-counts")
     public List<Object[]> getInventoryUserCountsGroupByItem() {
         return itemService.getInventoryUserCountsGroupByItem();
+    }
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<?> deleteItem(@PathVariable Long itemId) {
+        try {
+            Item item = itemService.findById(itemId);
+            item.setCategory(null);
+            item.getPriceDates().stream().map(priceDate -> {
+                priceDate.setItem(null);
+                priceDateService.savePriceDate(priceDate);
+                return priceDate;
+            });
+            //item.setPriceDates(null);
+            item.setSpecialities(null);
+            itemService.deleteById(itemId);
+            return ResponseEntity.ok(Map.of("message","Deleted item from database successfully"));
+        } catch (RuntimeException exception) {
+           throw new RuntimeException(exception.getMessage());
+        }
     }
 
 }

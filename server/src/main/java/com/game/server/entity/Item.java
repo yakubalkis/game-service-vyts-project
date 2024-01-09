@@ -42,7 +42,7 @@ public class Item {
     private Category category;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "inventory_item",
             joinColumns = @JoinColumn(name = "item_id"),
@@ -51,7 +51,7 @@ public class Item {
     private List<Inventory> inventories;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "speciality_item",
             joinColumns = @JoinColumn(name = "item_id"),
@@ -60,7 +60,7 @@ public class Item {
 
     private List<Speciality> specialities;
 
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "purchase_item",
             joinColumns = @JoinColumn(name = "item_id"),
