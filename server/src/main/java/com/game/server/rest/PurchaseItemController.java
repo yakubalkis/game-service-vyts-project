@@ -40,7 +40,7 @@ public class PurchaseItemController {
         Purchase purchase = new Purchase();
 
         // getCurrentPriceDate fonksiyonu yazildiktan sonra sag kosul düzeltilcek, itemin fiyati ile karsilastirilmali
-        if(user.getBudget().getCurrentGameMoney() >= 1) {
+        if(user.getBudget().getCurrentGameMoney() >= item.getCurrentPriceDate().getPrice()) {
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -48,17 +48,17 @@ public class PurchaseItemController {
             user.getInventory().addItem(item); // cantaya ekle
 
             Budget budget = user.getBudget(); // cüzdan bakiyesinden düş
-            budget.setCurrentGameMoney(user.getBudget().getCurrentGameMoney() - 10 * request.getAmount());
+            budget.setCurrentGameMoney(user.getBudget().getCurrentGameMoney() - item.getCurrentPriceDate().getPrice()* request.getAmount());
             user.setBudget(budget);
             purchase.addItem(item); // satin alima ekle
             purchase.setPurchaseDate(formattedDateTime);
-            purchase.setPurchasePrice(10); // TO-DO: bu item in fiyati olacak
+            purchase.setPurchasePrice(item.getCurrentPriceDate().getPrice());
             purchase.setAmount(request.getAmount());
             user.addPurchase(purchase); // user ile satin_alim iliski kur
             //log
-            String message = "User " + user.getUsername() + // TO-DO: burada fiyat bilgisi de eklenmeli loga
+            String message = "User " + user.getUsername() +
                     " bought "+ request.getAmount() + " " +
-                    item.getItemName() + " on " + formattedDateTime + ".";
+                    item.getItemName() +"with price " + item.getCurrentPriceDate().getPrice() + " on " + formattedDateTime + ".";
             Log log = new Log(message,"purchase");
             user.addLog(log);
             userService.saveUser(user);
