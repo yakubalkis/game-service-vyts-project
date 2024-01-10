@@ -22,13 +22,16 @@ export default function AllItems({onClickBackBtn}) {
     },[])
 
     const itemList = items.map((item) => {
+        const specs = item.specialities.length > 1 ? item.specialities.map(spec => {return spec + ","}) : item.specialities[0]
         return(
             <ul style={{marginLeft:"1rem", paddingRight:"5px", border: "2px solid blue", borderRadius:"5px"}} key={item.id}>
                 <li>ID: {item.id}</li>
                 <li>Item name: {item.itemName}</li>
                 <li>Symbol filename: {item.symbol}</li>
                 <li>Category name: {item.categoryName}</li>
-                <li>Current Price: {item.currentPriceDate}</li>
+                <li>Specialities: {specs}</li>
+                <li>Current Price: {item.currentPrice}</li>
+                <li>Price Type: {item.priceType}</li>
             </ul>
         )
     })

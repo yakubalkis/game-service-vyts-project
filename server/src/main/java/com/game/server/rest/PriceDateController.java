@@ -2,6 +2,7 @@ package com.game.server.rest;
 
 import com.game.server.entity.Item;
 import com.game.server.entity.PriceDate;
+import com.game.server.rest.dto.PriceDateRequest;
 import com.game.server.service.ItemService;
 import com.game.server.service.PriceDateService;
 import lombok.AllArgsConstructor;
@@ -34,9 +35,13 @@ public class PriceDateController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> createPriceDate() {
+    public String createPriceDate(@RequestBody PriceDateRequest request) {
+        Item item = itemService.findById(request.getItemId());
+        PriceDate priceDate = new PriceDate(request.getPrice(),request.getPriceDate(),request.getPriceType());
+        item.addPriceDate(priceDate);
 
-        return null;
+        itemService.save(item);
+        return "Process is successfull";
     }
 
 
@@ -45,6 +50,12 @@ public class PriceDateController {
 
         return new ResponseEntity<>(priceDateService.findAll(), HttpStatus.FOUND);
 
+    }
+
+    @GetMapping("/item/{itemId}")
+    public List<PriceDate> getPriceDatesOfItem(@PathVariable Long itemId) {
+        Item item = itemService.findById(itemId);
+        return item.getPriceDates();
     }
 
     @GetMapping("/{itemId}")

@@ -6,6 +6,9 @@ import AllItems from "./AllItems";
 import AllLogs from "./AllLogs";
 import CreateCategory from "./CreateCategory";
 import CreateItem from "./CreateItem";
+import PriceDatesOfItem from "./PriceDatesOfItem";
+import CreatePriceDate from "./CreatePriceDate";
+import TotalAnalysisOfUser from "./TotalAnalysisOfUser";
 
 export default function AdminHomePage() {
 
@@ -20,14 +23,19 @@ export default function AdminHomePage() {
     }
 
     return(
+        <>
+        <h2>Admin Panel</h2>
         <div style={{marginTop: "20px", display: "flex", flexWrap:"wrap"}}>
             {renderOption==="allUsers" &&  <AllUsers onClickBackBtn={onClickBackBtn} />}
-            {renderOption==="purchases" && <AllPurchases onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="purchases" && <AllPurchases onClickBackBtn={onClickBackBtn} forWho={"all"} />}
             {renderOption==="categories" && <AllCategories onClickBackBtn={onClickBackBtn} />}
             {renderOption==="items" && <AllItems onClickBackBtn={onClickBackBtn} />}
             {renderOption==="logs" && <AllLogs onClickBackBtn={onClickBackBtn} />}
             {renderOption==="createCategory" && <CreateCategory onClickBackBtn={onClickBackBtn} />}
             {renderOption==="createItem" && <CreateItem onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="priceDatesOfItem" && <PriceDatesOfItem onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="createPriceDate" && <CreatePriceDate onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="totalAnalysisOfUser" && <TotalAnalysisOfUser onClickBackBtn={onClickBackBtn} />}
 
 
             {renderOption === "" && 
@@ -65,8 +73,24 @@ export default function AdminHomePage() {
                                         Click to create an Item
                 </button>
             }
+            {renderOption === "" && 
+                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("priceDatesOfItem")}>
+                                        Click to get price dates of an Item
+                </button>
+            }
+            {renderOption === "" && 
+                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("createPriceDate")}>
+                                        Click to create price date for an Item
+                </button>
+            }
+            {renderOption === "" && 
+                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("totalAnalysisOfUser")}>
+                                        Click to get total analysis of an user
+                </button>
+            }
             
             
         </div>
+        </>
     )
 }

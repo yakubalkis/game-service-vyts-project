@@ -1,5 +1,6 @@
 package com.game.server.rest;
 
+import com.game.server.entity.Inventory;
 import com.game.server.entity.Item;
 import com.game.server.entity.User;
 import com.game.server.rest.dto.ItemRequest;
@@ -7,6 +8,8 @@ import com.game.server.service.ItemService;
 import com.game.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/item")
-public class InventoryItemController { // deneme amacli!!, bu senaryo bir satin alimda gerceklesecek
-                                        // satin alim gerceklesir ardindan alinan item cantaya eklenir.
+public class InventoryItemController {
 
     private final UserService userService;
     private final ItemService itemService;
@@ -42,6 +44,12 @@ public class InventoryItemController { // deneme amacli!!, bu senaryo bir satin 
         userService.saveUser(user);
 
         return "Process is successful";
+    }
+
+    @GetMapping("/{username}")
+    public Inventory getInvetoryOfUser(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return user.getInventory();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.game.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,7 +27,14 @@ public class PriceDate {
 
     private String priceType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
+
+    public PriceDate(int price, String priceDate, String priceType) {
+        this.price = price;
+        this.priceDate = priceDate;
+        this.priceType = priceType;
+    }
 }

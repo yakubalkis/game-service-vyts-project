@@ -55,8 +55,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getItems(){ // TO-DO: burada currentPriceDate dönüyo ama onun yerine current price dönmeli
-                                    // price isi sonrasi güncellenecek, gerekirse dto yazilsin
+    public List<ItemDto> getItems(){
         return itemService.findAll().stream()
                 .map(userMapper::toItemDto)
                 .collect(Collectors.toList());

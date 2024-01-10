@@ -1,6 +1,8 @@
 package com.game.server.mapper;
 
+import com.game.server.entity.Category;
 import com.game.server.entity.Item;
+import com.game.server.entity.PriceDate;
 import com.game.server.entity.Speciality;
 import com.game.server.entity.Purchase;
 import com.game.server.entity.User;
@@ -12,6 +14,8 @@ import com.game.server.rest.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserMapperImpl implements UserMapper {
@@ -37,13 +41,31 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public ItemDto toItemDto(Item item) {
+        Category category = null;
+        List<Speciality> specialities = null;
+        int price = 0;
+        String priceType = "";
+
         if(item == null) {
             return null;
         }
-        if(item.getCategory()==null) {
-            return new ItemDto(item.getId(), item.getItemName(), item.getSymbol(), null);
+        if(item.getCategory()!=null) {
+            category = item.getCategory();
         }
-        return new ItemDto(item.getId(), item.getItemName(), item.getSymbol(), item.getCategory().getCategoryName());
+        if(item.getSpecialities()!=null) {
+            specialities = item.getSpecialities();
+        }
+        if(item.getCurrentPriceDate()!=null) {
+            price = item.getCurrentPriceDate().getPrice();
+            priceType = item.getCurrentPriceDate().getPriceType();
+        }
+
+        return new ItemDto(item.getId(), item.getItemName(), item.getSymbol(),
+                category.getCategoryName(), price, priceType,
+                specialities
+                .stream()
+                .map(speciality -> speciality.getSpecialityName())
+                .collect(Collectors.toList()));
     }
 
     @Override

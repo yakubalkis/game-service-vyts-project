@@ -7,12 +7,15 @@ import com.game.server.entity.Log;
 import com.game.server.entity.Rank;
 import com.game.server.entity.User;
 import com.game.server.exception.DuplicatedUserInfoException;
+import com.game.server.mapper.UserMapper;
 import com.game.server.request.EmailRequest;
 import com.game.server.request.SmsRequest;
 import com.game.server.rest.dto.AuthResponse;
+import com.game.server.rest.dto.CustomUserDto;
 import com.game.server.rest.dto.LoginRequest;
 import com.game.server.rest.dto.SignUpRequest;
 import com.game.server.rest.dto.SignUpResponse;
+import com.game.server.rest.dto.UserDto;
 import com.game.server.security.JwtTokenProvider;
 import com.game.server.security.WebSecurityConfig;
 import com.game.server.security.oauth2.AuthProvider;
@@ -32,6 +35,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +60,7 @@ public class AuthController {
     private final LevelService levelService;
     private final RankService rankService;
     private final AuthenticationConfiguration authConfiguration;
+    private final UserMapper userMapper;
 
 
     @Autowired
@@ -191,5 +196,10 @@ public class AuthController {
 
     public void sendSms(SmsRequest smsRequest) {
         smsService.sendSms(smsRequest);
+    }
+
+    @GetMapping("/{username}")
+    public CustomUserDto getUser(@PathVariable String username) {
+        return userMapper.toCustomUserDto(userService.getUserByUsername(username));
     }
 }

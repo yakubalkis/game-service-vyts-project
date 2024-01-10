@@ -2,21 +2,36 @@ import { useState, useEffect } from "react";
 import getConfig from "../../utils/getConfig"
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/purchase/all";
+const API_URL_ALL = "http://localhost:8080/purchase/all";
+const API_URL_USER = "http://localhost:8080/purchase/all/user/";
 
-export default function AllPurchases({onClickBackBtn}) {
+export default function AllPurchases({onClickBackBtn, forWho}) {
+    console.log(forWho)
     const [purchaseList, setPurchaseList] = useState([]);
 
     useEffect(() => {
-        const config = getConfig();
 
-        axios.get(API_URL, config)
+        const config = getConfig();
+        if(forWho==="all") {
+            axios.get(API_URL_ALL, config)
             .then((res) => {
                 setPurchaseList(res.data)
                 console.log(res.data)
             }).catch(err => {
                 window.alert("Something went wrong." + " " + err.message);
             })
+        } else {
+            const username = JSON.parse(localStorage.getItem("user"));
+
+            axios.get(API_URL_USER+username, config)
+            .then((res) => {
+                setPurchaseList(res.data)
+                console.log(res.data)
+            }).catch(err => {
+                window.alert("Something went wrong." + " " + err.message);
+            })
+        }
+        
     }, []);
 
     const purchaseListDisplay = purchaseList.map((purchase) => {
