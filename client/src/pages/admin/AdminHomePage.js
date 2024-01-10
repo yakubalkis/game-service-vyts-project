@@ -8,7 +8,8 @@ import CreateCategory from "./CreateCategory";
 import CreateItem from "./CreateItem";
 import PriceDatesOfItem from "./PriceDatesOfItem";
 import CreatePriceDate from "./CreatePriceDate";
-import TotalAnalysisOfUser from "./TotalAnalysisOfUser";
+import TotalPurchaseAnalysisOfUser from "./TotalPurchaseAnalysisOfUser";
+import TotalItemAnalysis from "./TotalItemAnalysis";
 
 export default function AdminHomePage() {
 
@@ -35,7 +36,8 @@ export default function AdminHomePage() {
             {renderOption==="createItem" && <CreateItem onClickBackBtn={onClickBackBtn} />}
             {renderOption==="priceDatesOfItem" && <PriceDatesOfItem onClickBackBtn={onClickBackBtn} />}
             {renderOption==="createPriceDate" && <CreatePriceDate onClickBackBtn={onClickBackBtn} />}
-            {renderOption==="totalAnalysisOfUser" && <TotalAnalysisOfUser onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="totalPurchaseAnalysisOfUser" && <TotalPurchaseAnalysisOfUser onClickBackBtn={onClickBackBtn} />}
+            {renderOption==="totalItemAnalysisOfUser" && <TotalItemAnalysis onClickBackBtn={onClickBackBtn} />}
 
 
             {renderOption === "" && 
@@ -84,8 +86,13 @@ export default function AdminHomePage() {
                 </button>
             }
             {renderOption === "" && 
-                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("totalAnalysisOfUser")}>
-                                        Click to get total analysis of an user
+                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("totalPurchaseAnalysisOfUser")}>
+                                        Click to get purchase analysis of an user
+                </button>
+            }
+            {renderOption === "" && 
+                <button style={{marginLeft: "10px",marginTop:"10px"}} className="btn btn-primary w-10 fs-6" onClick={() => handleClick("totalItemAnalysisOfUser")}>
+                                        Click to get item analysis
                 </button>
             }
             

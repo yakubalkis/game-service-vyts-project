@@ -4,7 +4,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/purchase/purchase-details/";
 
-export default function TotalAnalysisOfUser({onClickBackBtn}) {
+export default function TotalPurchaseAnalysisOfUser({onClickBackBtn}) {
 
     const [userId, setUserId] = useState("");
     const [analyzes, setAnalyzes] = useState([]);
