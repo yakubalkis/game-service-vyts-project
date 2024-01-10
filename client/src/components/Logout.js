@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 export default function Logout(){
     const navigate = useNavigate();
-    const username = localStorage.getItem("user"); // get username no from local storage
+    const username = JSON.parse(localStorage.getItem("user")); // get username no from local storage
     
 
     function handleLogout(){
